@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 
 public interface TransferService {
 
-    void transfer(String accountFrom, String accountTo, BigDecimal amount) throws InvalidTransferException;
+    void transfer(String accountFrom, String accountTo, BigDecimal amount);
 }
