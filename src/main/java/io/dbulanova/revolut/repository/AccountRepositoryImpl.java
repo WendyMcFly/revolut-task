@@ -32,4 +32,8 @@ public class AccountRepositoryImpl implements AccountRepository {
     public void delete(Account account) {
         accounts.remove(account.getAccountNumber());
     }
+
+    public void clear() {
+        accounts.clear();
+    }
 }

@@ -17,12 +17,6 @@ import java.util.List;
 
 @Path("/accounts")
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-/*
-  The jooby's default exception handler is used, which maps
-  IllegalArgumentException -> 400
-  FileNotFound             -> 404
-  Exception                -> 500
-*/
 public class AccountController {
 
     private final TransferService transferService;
