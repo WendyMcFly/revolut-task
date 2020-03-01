@@ -1,5 +1,6 @@
 package io.dbulanova.revolut;
 
+import io.dbulanova.revolut.controller.TransferRequest;
 import io.dbulanova.revolut.domain.Account;
 import io.dbulanova.revolut.repository.AccountRepository;
 import io.dbulanova.revolut.repository.AccountRepositoryImpl;
@@ -9,6 +10,7 @@ import org.junit.*;
 
 import java.math.BigDecimal;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.JsonConfig.jsonConfig;
 import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
@@ -16,12 +18,11 @@ import static org.hamcrest.Matchers.*;
 
 public class AppTest {
 
-    private static final BigDecimal FIRST_ACCOUNT_BALANCE = BigDecimal.ZERO;
-    private static final BigDecimal SECOND_ACCOUNT_BALANCE = BigDecimal.ONE;
-    private static final BigDecimal THIRD_ACCOUNT_BALANCE = BigDecimal.valueOf(100500L);
+    private static final BigDecimal FIRST_ACCOUNT_BALANCE = new BigDecimal("100000.50");
+    private static final BigDecimal SECOND_ACCOUNT_BALANCE = new BigDecimal("200000.50");
+    private static final BigDecimal AMOUNT = new BigDecimal("400.50");
     private static final String FIRST_ACCOUNT_NUMBER = "A1";
     private static final String SECOND_ACCOUNT_NUMBER = "A2";
-    private static final String THIRD_ACCOUNT_NUMBER = "A3";
 
     private static App app = new App();
 
@@ -34,7 +35,7 @@ public class AppTest {
     }
 
     @Before
-    public void clearAccRepo() {
+    public void clearAccountRepository() {
         app.require(AccountRepositoryImpl.class).clear();
     }
 
@@ -45,11 +46,10 @@ public class AppTest {
         when()
                 .get("/accounts")
                 .then()
-                .body("$", hasSize(3));
+                .body("accounts", hasSize(2));
     }
 
     @Test
-    @Ignore
     public void testGetAccount() {
         givenAccountsPopulated();
 
@@ -61,13 +61,76 @@ public class AppTest {
     }
 
     @Test
+    public void testValidTransfer() {
+        givenAccountsPopulated();
+
+        given().
+                when()
+                .body(new TransferRequest(FIRST_ACCOUNT_NUMBER, SECOND_ACCOUNT_NUMBER, AMOUNT))
+                .contentType("application/json")
+                .post("/accounts/transfer")
+                .then().statusCode(200);
+
+        when()
+                .get("/accounts/A1")
+                .then()
+                .body("accountBalance", comparesEqualTo(new BigDecimal("99600.00")));
+
+        when()
+                .get("/accounts/A2")
+                .then()
+                .body("accountBalance", comparesEqualTo(new BigDecimal("200401.00")));
+    }
+
+    @Test
+    public void testInvalidTransferNoAccount() {
+        givenAccountsPopulated();
+
+        given().
+                when()
+                .body(new TransferRequest("A3", SECOND_ACCOUNT_NUMBER, AMOUNT))
+                .contentType("application/json")
+                .post("/accounts/transfer")
+                .then()
+                .statusCode(400)
+                .body(containsString("Account A3 is not found"));
+    }
+
+    @Test
+    public void testInvalidTransferInsufficientFunds() {
+        givenAccountsPopulated();
+
+        given().
+                when()
+                .body(new TransferRequest(FIRST_ACCOUNT_NUMBER, SECOND_ACCOUNT_NUMBER, AMOUNT.pow(10)))
+                .contentType("application/json")
+                .post("/accounts/transfer")
+                .then()
+                .statusCode(400)
+                .body(containsString("insufficient funds"));
+
+        // make sure no money was transferred
+        when()
+                .get("/accounts/A1")
+                .then()
+                .body("accountBalance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
+
+        when()
+                .get("/accounts/A2")
+                .then()
+                .body("accountBalance", comparesEqualTo(SECOND_ACCOUNT_BALANCE));
+
+    }
+
+
+    @Test
     public void testGetMissingAccount() {
         givenAccountsPopulated();
 
         when()
                 .get("/accounts/A4")
                 .then()
-                .statusCode(404);
+                .statusCode(400);
     }
 
 
@@ -83,7 +146,6 @@ public class AppTest {
     private void givenAccountsPopulated() {
         createMockAccount(FIRST_ACCOUNT_NUMBER, FIRST_ACCOUNT_BALANCE);
         createMockAccount(SECOND_ACCOUNT_NUMBER, SECOND_ACCOUNT_BALANCE);
-        createMockAccount(THIRD_ACCOUNT_NUMBER, THIRD_ACCOUNT_BALANCE);
     }
 
 

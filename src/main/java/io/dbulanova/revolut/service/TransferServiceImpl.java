@@ -29,7 +29,7 @@ public class TransferServiceImpl implements TransferService {
         transactionService.transact(accountFrom, accountTo, (from, to) -> {
 
             if (from.getAccountBalance().compareTo(amount) < 0) {
-                throw new IllegalArgumentException("Account " + accountFromStr + " has insufficient funds (req: " + amount + "; actual: " + from.getAccountBalance());
+                throw new IllegalArgumentException("Account " + accountFromStr + " has insufficient funds (req: " + amount + "; actual: " + from.getAccountBalance() + ")");
             }
 
             from.setAccountBalance(from.getAccountBalance().subtract(amount));
@@ -39,6 +39,6 @@ public class TransferServiceImpl implements TransferService {
 
     private Account getAccountByNumber(String accountNum) {
         return accountRepository.findByAccountNumber(accountNum)
-                .orElseThrow(() -> new IllegalArgumentException("Account " + accountNum + " not found!"));
+                .orElseThrow(() -> new IllegalArgumentException("Account " + accountNum + " is not found!"));
     }
 }
