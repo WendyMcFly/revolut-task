@@ -22,12 +22,11 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
         }
         first.lock();
         try {
-            second.lock(); {
-                try {
-                    action.accept(account1, account2);
-                } finally {
-                    second.unlock();
-                }
+            second.lock();
+            try {
+                action.accept(account1, account2);
+            } finally {
+                second.unlock();
             }
         } finally {
             first.unlock();
