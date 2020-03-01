@@ -12,6 +12,4 @@ public interface AccountRepository {
     Optional<Account> findByAccountNumber(String accountNumber);
 
     Account save(Account account);
-
-    void delete(Account account);
 }

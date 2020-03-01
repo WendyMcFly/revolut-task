@@ -28,11 +28,6 @@ public class AccountRepositoryImpl implements AccountRepository {
         return accounts.put(account.getAccountNumber(), account);
     }
 
-    @Override
-    public void delete(Account account) {
-        accounts.remove(account.getAccountNumber());
-    }
-
     public void clear() {
         accounts.clear();
     }

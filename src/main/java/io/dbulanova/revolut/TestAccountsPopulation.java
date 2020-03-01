@@ -6,9 +6,9 @@ import io.dbulanova.revolut.repository.AccountRepository;
 import java.math.BigDecimal;
 import java.util.stream.IntStream;
 
-public class TestAccountsPopulation {
+class TestAccountsPopulation {
 
-    public static void populateAccounts(AccountRepository rep) {
+    static void populateAccounts(AccountRepository rep) {
 
         IntStream.range(1, 10)
                 .mapToObj(i -> new Account(String.valueOf(i), BigDecimal.valueOf(i)))
