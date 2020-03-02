@@ -1,4 +1,9 @@
 package io.dbulanova.revolut.service.exception;
 
-public class InvalidTransferException extends RuntimeException {
+import org.jooby.Err;
+
+public class InvalidTransferException extends Err {
+    public InvalidTransferException() {
+        super(400);
+    }
 }

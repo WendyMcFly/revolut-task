@@ -1,7 +1,9 @@
 package io.dbulanova.revolut.service.exception;
 
-public class NotEnoughMoneyException extends RuntimeException {
+import org.jooby.Err;
+
+public class NotEnoughMoneyException extends Err {
     public NotEnoughMoneyException(String s) {
-        super(s);
+        super(400, s);
     }
 }

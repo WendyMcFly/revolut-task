@@ -1,4 +1,9 @@
 package io.dbulanova.revolut.service.exception;
 
-public class AccountNotFoundException extends RuntimeException {
+import org.jooby.Err;
+
+public class AccountNotFoundException extends Err {
+    public AccountNotFoundException() {
+        super(404);
+    }
 }

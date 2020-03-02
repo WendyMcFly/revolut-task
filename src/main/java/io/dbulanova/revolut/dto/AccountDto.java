@@ -9,14 +9,16 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-@JsonPropertyOrder({"accountNumber", "balance"})
+@JsonPropertyOrder({"number", "balance", "currency"})
 public class AccountDto {
 
-    private String accountNumber;
+    private String number;
 
-    private BigDecimal accountBalance;
+    private BigDecimal balance;
+
+    private String currency;
 
     public static AccountDto fromDomain(Account account) {
-        return new AccountDto(account.getNumber(), account.getBalance());
+        return new AccountDto(account.getNumber(), account.getBalance(), account.getCurrency().getDisplayName());
     }
 }

@@ -22,7 +22,7 @@ public class AccountDtoServiceImpl implements AccountDtoService {
     public List<AccountDto> getAll() {
         return accountRepository.getAll().stream()
                 .map(AccountDto::fromDomain)
-                .sorted(Comparator.comparing(AccountDto::getAccountNumber))
+                .sorted(Comparator.comparing(AccountDto::getNumber))
                 .collect(toList());
     }
 

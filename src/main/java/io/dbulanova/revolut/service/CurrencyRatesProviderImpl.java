@@ -17,16 +17,16 @@ public class CurrencyRatesProviderImpl implements CurrencyRatesProvider {
         String curTo;
     }
 
-    private final Map<CacheKey, BigDecimal> currentyRates;
+    private final Map<CacheKey, BigDecimal> currencyRates;
 
     {
-        currentyRates = new HashMap<>();
-        currentyRates.put(new CacheKey("RUB", "USD"), new BigDecimal("56.12"));
-        currentyRates.put(new CacheKey("USD", "RUB"), new BigDecimal("0.0174"));
-        currentyRates.put(new CacheKey("RUB", "EUR"), new BigDecimal("62.32"));
-        currentyRates.put(new CacheKey("EUR", "RUB"), new BigDecimal("0.0161"));
-        currentyRates.put(new CacheKey("EUR", "USD"), new BigDecimal("1.12"));
-        currentyRates.put(new CacheKey("USD", "EUR"), new BigDecimal("0.92"));
+        currencyRates = new HashMap<>();
+        currencyRates.put(new CacheKey("RUB", "USD"), new BigDecimal("56.12"));
+        currencyRates.put(new CacheKey("USD", "RUB"), new BigDecimal("0.0174"));
+        currencyRates.put(new CacheKey("RUB", "EUR"), new BigDecimal("62.32"));
+        currencyRates.put(new CacheKey("EUR", "RUB"), new BigDecimal("0.0161"));
+        currencyRates.put(new CacheKey("EUR", "USD"), new BigDecimal("1.12"));
+        currencyRates.put(new CacheKey("USD", "EUR"), new BigDecimal("0.92"));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CurrencyRatesProviderImpl implements CurrencyRatesProvider {
         if (from.equals(to)) {
             return BigDecimal.ONE;
         }
-        BigDecimal rate = currentyRates.get(new CacheKey(from.getCurrencyCode(), to.getCurrencyCode()));
+        BigDecimal rate = currencyRates.get(new CacheKey(from.getCurrencyCode(), to.getCurrencyCode()));
         if (rate == null) {
             throw new IllegalArgumentException("No conversion rates found for (" + from.getCurrencyCode() + "," + to.getCurrencyCode() + ")");
         }

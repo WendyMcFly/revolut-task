@@ -57,7 +57,7 @@ public class AppTest {
         when()
                 .get("/accounts/A1")
                 .then()
-                .body("accountNumber", is(FIRST_ACCOUNT_NUMBER))
+                .body("number", is(FIRST_ACCOUNT_NUMBER))
                 .body("balance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
     }
 
@@ -131,7 +131,7 @@ public class AppTest {
     }
 
 
-    @Test 
+    @Test
     public void testGetMissingAccount() {
         givenAccountsPopulated();
 

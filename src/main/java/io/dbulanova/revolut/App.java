@@ -32,18 +32,6 @@ public class App extends Jooby {
 
         //Populate the repository with test accounts!
         onStart(reg -> TestAccountsPopulation.populateAccounts(reg.require(AccountRepository.class)));
-
-        {
-            err(AccountNotFoundException.class, (req, rsp, err) -> {
-                throw new Err(404);
-            });
-            err(InvalidTransferException.class, (req, rsp, err) -> {
-                throw new Err(400);
-            });
-            err(NotEnoughMoneyException.class, (req, rsp, err) -> {
-                throw new Err(400);
-            });
-        }
     }
 
     public static void main(final String[] args) {
