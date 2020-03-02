@@ -4,11 +4,7 @@ import io.dbulanova.revolut.controller.AccountController;
 import io.dbulanova.revolut.repository.AccountRepository;
 import io.dbulanova.revolut.repository.AccountRepositoryImpl;
 import io.dbulanova.revolut.service.*;
-import io.dbulanova.revolut.service.exception.AccountNotFoundException;
-import io.dbulanova.revolut.service.exception.InvalidTransferException;
-import io.dbulanova.revolut.service.exception.NotEnoughMoneyException;
 import lombok.extern.slf4j.Slf4j;
-import org.jooby.Err;
 import org.jooby.Jooby;
 import org.jooby.json.Jackson;
 

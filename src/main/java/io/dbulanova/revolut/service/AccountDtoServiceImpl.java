@@ -30,6 +30,6 @@ public class AccountDtoServiceImpl implements AccountDtoService {
     public AccountDto getOne(String id) {
         return accountRepository.findByAccountNumber(id)
                 .map(AccountDto::fromDomain)
-                .orElseThrow(AccountNotFoundException::new);
+                .orElseThrow(() -> new AccountNotFoundException("Account " + id + " is not found"));
     }
 }

@@ -22,11 +22,8 @@ public class TransferServiceImpl implements TransferService {
 
     @Override
     public void transfer(String accountFromStr, String accountToStr, BigDecimal amount) {
-        if ((accountFromStr == null || accountToStr == null) ||
-                ((Objects.equals(accountFromStr, accountToStr))) ||
-                amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidTransferException();
-        }
+        checkArguments(accountFromStr, accountToStr, amount);
+
         Account accountFrom = getAccountByNumber(accountFromStr);
         Account accountTo = getAccountByNumber(accountToStr);
 
@@ -44,8 +41,23 @@ public class TransferServiceImpl implements TransferService {
         });
     }
 
+    private void checkArguments(String accountFromStr, String accountToStr, BigDecimal amount) {
+        if (accountFromStr == null || accountToStr == null) {
+            throw new InvalidTransferException("Accounts number must not be null");
+        }
+
+        if ((Objects.equals(accountFromStr, accountToStr))) {
+            throw new InvalidTransferException("Cannot transfer to the same account");
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidTransferException("Amount to transfer must be greater than 0");
+        }
+    }
+
     private Account getAccountByNumber(String accountNum) {
         return accountRepository.findByAccountNumber(accountNum)
-                .orElseThrow(() -> new IllegalArgumentException("Account " + accountNum + " is not found!"));
+                .orElseThrow(() -> new AccountNotFoundException("Account " + accountNum + " is not found!"));
     }
+
 }

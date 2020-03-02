@@ -6,7 +6,10 @@ import io.dbulanova.revolut.repository.AccountRepository;
 import io.dbulanova.revolut.repository.AccountRepositoryImpl;
 import io.restassured.RestAssured;
 import org.jooby.test.JoobyRule;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -93,7 +96,7 @@ public class AppTest {
                 .contentType("application/json")
                 .post("/accounts/transfer")
                 .then()
-                .statusCode(400)
+                .statusCode(404)
                 .body(containsString("Account A3 is not found"));
     }
 
