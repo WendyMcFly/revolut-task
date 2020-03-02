@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Account {
@@ -11,15 +12,19 @@ public class Account {
     private final ReentrantLock lock = new ReentrantLock();
 
     @Getter
-    private String accountNumber;
+    private String number;
+
+    @Getter
+    private Currency currency;
 
     @Getter
     @Setter
-    private volatile BigDecimal accountBalance;
+    private volatile BigDecimal balance;
 
-    public Account(String accountNumber, BigDecimal accountBalance) {
-        this.accountNumber = accountNumber;
-        this.accountBalance = accountBalance;
+    public Account(String number, BigDecimal balance, Currency currency) {
+        this.number = number;
+        this.balance = balance;
+        this.currency = currency;
     }
 
     public void lock() {

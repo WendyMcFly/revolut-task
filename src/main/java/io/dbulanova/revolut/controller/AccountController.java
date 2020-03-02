@@ -2,7 +2,7 @@ package io.dbulanova.revolut.controller;
 
 
 import io.dbulanova.revolut.dto.AccountDto;
-import io.dbulanova.revolut.service.AccountService;
+import io.dbulanova.revolut.service.AccountDtoService;
 import io.dbulanova.revolut.service.TransferService;
 import lombok.RequiredArgsConstructor;
 import org.jooby.Results;
@@ -20,17 +20,17 @@ import java.util.List;
 public class AccountController {
 
     private final TransferService transferService;
-    private final AccountService accountService;
+    private final AccountDtoService accountDtoService;
 
     @GET
     public List<AccountDto> getAll() {
-        return accountService.getAll();
+        return accountDtoService.getAll();
     }
 
     @Path("/{id}")
     @GET
     public AccountDto getOne(String id) {
-        return accountService.getOne(id);
+        return accountDtoService.getOne(id);
     }
 
     @Path("/transfer")

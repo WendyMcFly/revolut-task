@@ -2,6 +2,7 @@ package io.dbulanova.revolut.service;
 
 import io.dbulanova.revolut.dto.AccountDto;
 import io.dbulanova.revolut.repository.AccountRepository;
+import io.dbulanova.revolut.service.exception.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class AccountServiceImpl implements AccountService {
+public class AccountDtoServiceImpl implements AccountDtoService {
 
     private final AccountRepository accountRepository;
 
@@ -29,6 +30,6 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto getOne(String id) {
         return accountRepository.findByAccountNumber(id)
                 .map(AccountDto::fromDomain)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(AccountNotFoundException::new);
     }
 }

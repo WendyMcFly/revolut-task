@@ -9,6 +9,7 @@ import org.jooby.test.JoobyRule;
 import org.junit.*;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -57,7 +58,7 @@ public class AppTest {
                 .get("/accounts/A1")
                 .then()
                 .body("accountNumber", is(FIRST_ACCOUNT_NUMBER))
-                .body("accountBalance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
+                .body("balance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
     }
 
     @Test
@@ -74,12 +75,12 @@ public class AppTest {
         when()
                 .get("/accounts/A1")
                 .then()
-                .body("accountBalance", comparesEqualTo(new BigDecimal("99600.00")));
+                .body("balance", comparesEqualTo(new BigDecimal("99600.00")));
 
         when()
                 .get("/accounts/A2")
                 .then()
-                .body("accountBalance", comparesEqualTo(new BigDecimal("200401.00")));
+                .body("balance", comparesEqualTo(new BigDecimal("200401.00")));
     }
 
     @Test
@@ -100,6 +101,13 @@ public class AppTest {
     public void testInvalidTransferInsufficientFunds() {
         givenAccountsPopulated();
 
+        String s = given().
+                when()
+                .body(new TransferRequest(FIRST_ACCOUNT_NUMBER, SECOND_ACCOUNT_NUMBER, AMOUNT.pow(10)))
+                .contentType("application/json")
+                .post("/accounts/transfer").asString();
+
+
         given().
                 when()
                 .body(new TransferRequest(FIRST_ACCOUNT_NUMBER, SECOND_ACCOUNT_NUMBER, AMOUNT.pow(10)))
@@ -113,24 +121,24 @@ public class AppTest {
         when()
                 .get("/accounts/A1")
                 .then()
-                .body("accountBalance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
+                .body("balance", comparesEqualTo(FIRST_ACCOUNT_BALANCE));
 
         when()
                 .get("/accounts/A2")
                 .then()
-                .body("accountBalance", comparesEqualTo(SECOND_ACCOUNT_BALANCE));
+                .body("balance", comparesEqualTo(SECOND_ACCOUNT_BALANCE));
 
     }
 
 
-    @Test
+    @Test 
     public void testGetMissingAccount() {
         givenAccountsPopulated();
 
         when()
                 .get("/accounts/A4")
                 .then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
 
@@ -150,6 +158,6 @@ public class AppTest {
 
 
     private void createMockAccount(String accountNumber, BigDecimal balance) {
-        app.require(AccountRepository.class).save(new Account(accountNumber, balance));
+        app.require(AccountRepository.class).save(new Account(accountNumber, balance, Currency.getInstance("USD")));
     }
 }

@@ -13,7 +13,7 @@ public class AccountTransactionServiceImpl implements AccountTransactionService 
         Account first;
         Account second;
 
-        if (account1.getAccountNumber().compareTo(account2.getAccountNumber()) > 0) {
+        if (account1.getNumber().compareTo(account2.getNumber()) > 0) {
             first = account1;
             second = account2;
         } else {
