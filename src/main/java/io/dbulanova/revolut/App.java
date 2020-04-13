@@ -21,6 +21,7 @@ public class App extends Jooby {
             binder.bind(TransferService.class).to(TransferServiceImpl.class);
             binder.bind(AccountDtoService.class).to(AccountDtoServiceImpl.class);
             binder.bind(CurrencyRatesProvider.class).to(CurrencyRatesProviderImpl.class);
+            binder.bind(IdempotencyKeyService.class).to(IdempotencyKeyServiceImpl.class);
         });
 
         //Actual routes

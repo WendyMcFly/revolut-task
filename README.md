@@ -28,3 +28,6 @@ Implicit requirements:
 ## build
 
     mvn clean install
+    
+    mvn --settings /Users/dbulanova/.m2/settings_dasha_123.xml clean install
+    mvn --settings /Users/dbulanova/.m2/settings_dasha_123.xml jooby:run
